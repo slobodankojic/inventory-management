@@ -1,0 +1,120 @@
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-12">
+      <div class="p-2 shadow">
+        <div class="card-title text-center mt-4">
+          <h4>Pregled svih proizvoda</h4>
+        </div>
+        <div class="form-floating m-3">
+          <input
+            type="text"
+            class="form-control"
+            name="filter"
+            [(ngModel)]="filterValue"
+            placeholder="Isfiltriraj po imenu"
+            (keyup)="applyFilter()"
+          />
+          <label for="floatingInput">Filter</label>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table row-border table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col" (click)="sortData('name')">
+                    Naziv {{ getSortDirectionIcon("name") }}
+                  </th>
+                  <th scope="col" (click)="sortData('quantity')">
+                    Kolicina {{ getSortDirectionIcon("quantity") }}
+                  </th>
+                  <th scope="col">Popisna kolicina</th>
+                  <th scope="col">Nova kolicina</th>
+                  <th scope="col">Obrisi/Izmeni</th>
+                </tr>
+              </thead>
+              <tbody class="table-group-divider align-middle">
+                <tr
+                  *ngFor="
+                    let product of products.slice(
+                      (currentPage - 1) * itemsPerPage,
+                      currentPage * itemsPerPage
+                    );
+                    let i = index
+                  "
+                >
+                  <td>{{ i + 1 }}.</td>
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.quantity }}</td>
+                  <td>
+                    <div class="popisnaKolicina">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="popisnaKolicina"
+                        placeholder="Popisna Kolicina"
+                        #inputField="ngModel"
+                        [(ngModel)]="product.newQuantity"
+                        (ngModelChange)="calculateTotalQuantity(product)"
+                      />
+                      <!-- <label for="popisnaKolicina">Popisna kolicina</label> -->
+                    </div>
+                  </td>
+                  <td>{{ getTotalQuantity(product) }}</td>
+                  <td>
+                    <button
+                      class="btn btn-outline-danger"
+                      (click)="onDelete(product.productId)"
+                    >
+                      Obrisi
+                    </button>
+                    <button
+                      class="btn btn-outline-warning"
+                      (click)="onEdit(product)"
+                    >
+                      Izmeni
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="pagination justify-content-center mb-4">
+          <ngb-pagination
+            [(page)]="currentPage"
+            [pageSize]="itemsPerPage"
+            [collectionSize]="pageCount"
+            (pageChange)="onPageChange()"
+            [maxSize]="3"
+            ><ng-template ngbPaginationPrevious>Prev</ng-template>
+            <ng-template ngbPaginationNext>Next</ng-template></ngb-pagination
+          >
+          <!-- <button
+            class="btn btn-primary"
+            (click)="onPreviousPage()"
+            [disabled]="currentPage == 1"
+          >
+            Prethodna
+          </button>
+          <button
+          class="btn btn-primary"
+          (click)="onNextPage()"
+          [disabled]="currentPage == pageCount"
+          >
+          Sledeca
+        </button>
+        <p class="mt-3">{{ currentPage }} / {{ pageCount }}</p> -->
+        </div>
+        <div class="buttons">
+          <button class="btn btn-warning" (click)="onUpdate()">
+            Izmeni kolicinu
+          </button>
+          <button class="btn btn-primary" routerLink="/products/add">
+            Dodaj novi proizvod
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

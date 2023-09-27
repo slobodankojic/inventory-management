@@ -1,0 +1,93 @@
+<section class="vh-80">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-8">
+        <div class="card shadow" style="border-radius: 1rem">
+          <div class="card-body p-5 text-center">
+            <h3 class="mb-5">Forma za dodavanje novog proizvoda</h3>
+            <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm)">
+              <div class="row">
+                <div class="col">
+                  <div class="form-floating mb-4">
+                    <input
+                      type="text"
+                      class="form-control form-control-lg"
+                      name="name"
+                      ngModel
+                      [(ngModel)]="documentName"
+                      #productName="ngModel"
+                      required
+                      [ngClass]="{'is-invalid': productName.touched && productName.invalid}"
+                    />
+                    <label class="form-label" for="name">Naziv</label>
+                    <div class="alert alert-danger" *ngIf="productName.touched && productName.invalid">
+                      Naziv je obavezan
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating mb-4">
+                    <input
+                      type="number"
+                      class="form-control form-control-lg"
+                      name="quantity"
+                      ngModel
+                      #productQuantity="ngModel"
+                      required
+                      [ngClass]="{'is-invalid': productQuantity.touched && productQuantity.invalid }"
+                    />
+                    <label class="form-label" for="quantity">Kolicina</label>
+                    <div class="alert alert-danger" *ngIf="productQuantity.touched && productQuantity.invalid">
+                      Kolicina je obavezna
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="row">
+                <div class="col">
+                  <div class="form-floating mb-4">
+                    <input
+                      type="number"
+                      class="form-control form-control-lg"
+                      name="purchasePrice"
+                      ngModel
+                      #purchasePrice="ngModel"
+                      required
+                      [ngClass]="{'is-invalid': purchasePrice.touched && purchasePrice.invalid}"
+                    />
+                    <label class="form-label" for="name">Nabavna cena</label>
+                    <div class="alert alert-danger" *ngIf="purchasePrice.touched && purchasePrice.invalid">
+                      Nabavna cena je obavezna
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-floating mb-4">
+                    <input
+                      type="number"
+                      class="form-control form-control-lg"
+                      name="sellingPrice"
+                      ngModel
+                      #sellingPrice="ngModel"
+                      required
+                      [ngClass]="{'is-invalid': sellingPrice.touched && sellingPrice.invalid}"
+                    />
+                    <label class="form-label" for="name">Prodajna cena</label>
+                    <div class="alert alert-danger" *ngIf="sellingPrice.touched && sellingPrice.invalid">
+                      Prodajna cena je obavezna
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <div class="form-group d-flex gap-3 justify-content-center">
+                <button type="submit" [disabled]="productForm.invalid" class="btn btn-primary mt-2 mr-2">Dodaj</button>
+                <button class="btn btn-warning mt-2 ml-2" routerLink="/products">Proizvodi</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  

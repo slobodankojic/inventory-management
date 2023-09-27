@@ -1,0 +1,17 @@
+.buttons{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    gap: 1em;
+}
+
+.popisnaKolicina input {
+    width: 60%;
+    height: 40px;
+}
+
+.pagination button {
+    width: 10%;
+    height: 50px;
+}
