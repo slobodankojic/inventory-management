@@ -16,6 +16,7 @@ export class AddEditProductComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //checking if document already exists and adding new if it doesnt exist
   onSubmit(formData: any){
     this.productService.checkIfDocumentExists(this.documentName).then(documentExists => {
       if(documentExists) {

@@ -13,6 +13,7 @@ export class ProductService {
   constructor(private afs: AngularFirestore, private toastr: ToastrService) {
   }
 
+  // Method to fetch all products from Firestore
   getProducts(): Observable<Product[]>{
     return this.afs.collection('products').snapshotChanges().pipe(
       map(actions => {
@@ -25,6 +26,7 @@ export class ProductService {
     );
   }
 
+  //This method checks if a document with the specified name exists in the Firestore collection
   checkIfDocumentExists(documentName: string): Promise<boolean> {
     return this.afs
       .collection<Product>('products')
@@ -35,6 +37,7 @@ export class ProductService {
       });
   }
 
+  //This method adds a new product to the Firestore collection.
   addProduct(data: any) {
     this.afs
       .collection('products')
@@ -47,6 +50,7 @@ export class ProductService {
       });
   }
 
+  //This method updates an existing product in Firestore.
   updateProduct(product: Product) {
     const productRef = this.afs.doc(`products/${product.productId}`)
     const productData = {
@@ -57,12 +61,14 @@ export class ProductService {
     });
   }
 
+  //Directly updates the product it does not return a promise or show a notification
   editProduct(product: Product) {
     const productRef = this.afs.collection('products').doc(product.productId);
     productRef.update(product);
   }
   
 
+  //This method deletes a product
   deleteProduct(id: any) {
     this.afs.doc(`products/${id}`).delete();
   }

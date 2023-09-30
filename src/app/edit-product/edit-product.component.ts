@@ -14,6 +14,7 @@ export class EditProductComponent {
 
   constructor(public activeModal: NgbActiveModal, private productService: ProductService) { }
 
+  //dialog open, save and close
   save() {
     this.productService.editProduct(this.product);
     this.activeModal.close(this.product);

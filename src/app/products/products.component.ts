@@ -12,27 +12,35 @@ import { EditProductComponent } from '../edit-product/edit-product.component';
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit {
+  // Properties
   products: Product[] = [];
   updatedProducts: Product[] = [];
   newQuantities: { [key: string]: number } = {};
   filterValue: string = '';
   currentPage = 1;
   itemsPerPage = 10;
+  currentSort: { field: string | null; direction: string | null } = {
+    field: null,
+    direction: null,
+  };
 
+  // Constructor
   constructor(
     private productService: ProductService,
     private afs: AngularFirestore,
     private toastr: ToastrService,
-    private modalService: NgbModal,
+    private modalService: NgbModal
   ) {}
 
-
+  // Lifecycle Hook
   ngOnInit(): void {
     this.getProducts();
   }
 
+  // Fetch all products
   getProducts() {
     this.productService.getProducts().subscribe((products) => {
+      // Sort products by date
       this.products = products.sort((a, b) => {
         if (a.addedDate > b.addedDate) {
           return -1;
@@ -44,6 +52,8 @@ export class ProductsComponent implements OnInit {
       });
     });
   }
+
+  // Calculate total quantity
   calculateTotalQuantity(product: Product) {
     if (product.newQuantity !== undefined) {
       product.totalQuantity = product.quantity + +product.newQuantity;
@@ -52,17 +62,20 @@ export class ProductsComponent implements OnInit {
     }
   }
 
+  // Get total quantity as a number
   getTotalQuantity(product: Product) {
-    if(product.newQuantity !== undefined){
+    if (product.newQuantity !== undefined) {
       return Number(product.totalQuantity);
-    }else{
-      return product.totalQuantity = 0;
+    } else {
+      return (product.totalQuantity = 0);
     }
   }
 
+  // Real-time update of products
   onUpdate() {
     this.updatedProducts = [];
     let promises: any[] = [];
+
     this.products.forEach((product) => {
       if (product.newQuantity !== undefined) {
         product.quantity = product.quantity + (+product.newQuantity || 0);
@@ -77,6 +90,7 @@ export class ProductsComponent implements OnInit {
           });
       }
     });
+
     Promise.all(promises).then(() => {
       this.updatedProducts.forEach((product) => {
         this.toastr.success(`Kolicina za ${product.name} uspesno izmenjena..!`);
@@ -85,16 +99,19 @@ export class ProductsComponent implements OnInit {
     });
   }
 
+  // Delete product
   onDelete(id: any) {
     this.productService.deleteProduct(id);
   }
 
-  onEdit(product: Product){
+  // Edit product
+  onEdit(product: Product) {
     const modalRef = this.modalService.open(EditProductComponent);
     modalRef.componentInstance.product = product;
     this.getProducts();
   }
 
+  // Apply filter
   applyFilter() {
     const filterValue = this.filterValue.toLowerCase();
 
@@ -107,11 +124,7 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  currentSort: { field: string | null; direction: string | null } = {
-    field: null,
-    direction: null,
-  };
-
+  // Sort data
   sortData(field: string | null) {
     if (
       this.currentSort.field === field &&
@@ -136,6 +149,7 @@ export class ProductsComponent implements OnInit {
     }
   }
 
+  // Get sort direction icon
   getSortDirectionIcon(field: string) {
     if (
       this.currentSort.field === field &&
@@ -151,11 +165,13 @@ export class ProductsComponent implements OnInit {
       return '';
     }
   }
+
+  // Pagination
   get pageNumbers() {
     const pageCount = Math.ceil(this.products.length / this.itemsPerPage);
-    return new Array(pageCount).fill(0).map((val, index) => index+1);
+    return new Array(pageCount).fill(0).map((val, index) => index + 1);
   }
-  
+
   get pageCount() {
     return Math.ceil(this.products.length / this.itemsPerPage);
   }
@@ -163,17 +179,16 @@ export class ProductsComponent implements OnInit {
   onPreviousPage() {
     this.currentPage--;
   }
-  
+
   onNextPage() {
     this.currentPage++;
   }
 
   onPageSelect(page: number) {
     this.currentPage = page;
-    this.getProducts();
   }
 
-  onPageChange(){
+  onPageChange() {
     this.getProducts();
   }
 }
